@@ -10,7 +10,6 @@
         "socket.io": "*",
         "glob": "*",
         "passport": "*",
-        "pkginfo": "0.2.x",
-        "ldapjs": "0.6.2"
+        "ldapjs": "*"
     }
 }

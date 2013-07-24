@@ -1,9 +1,0 @@
-{
-  "name": "passport-ldap",
-  "version": "0.0.1",
-  "description": "LDAP authentication strategy for Passport.",
-  "dependencies": {
-    "pkginfo": "0.2.x",
-    "ldapjs": "0.6.2"
-  }
-}
