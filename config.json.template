@@ -1,0 +1,46 @@
+{
+    "server": {
+        "port": 8888
+    },
+
+    "client": {
+        "port": 8888
+    },
+
+    "mysql": {
+        "host": "localhost",
+        "user": "asterisk",
+        "password": "secret",
+        "database": "asterisk"
+    },
+
+    "ldap": {
+        "server": {
+            "url": "ldap://ldap.example.com"
+        },
+        "bind": {
+            "dn": "cn=ampersand,ou=DSA,dc=example,dc=com",
+            "password": "secret"
+        },
+        "base": "ou=People,dc=example,dc=com",
+        "search": {
+            "scope": "sub"
+        },
+        "uidTag": "uid",
+        "admin": "cn=ampersand,ou=groups,dc=example,dc=com"
+    },
+
+    "asterisk": {
+        "host": "localhost",
+        "port": 5038,
+        "user": "ampersand",
+        "password": "secret"
+    },
+
+    "session": {
+        "key": "express.sid",
+        "secret": "secret"
+    },
+
+    "debug": false
+}

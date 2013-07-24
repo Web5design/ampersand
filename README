@@ -1,0 +1,43 @@
+Overview
+========
+
+A node.js application to manage Asterisk using the AMI interface.
+
+Installation
+============
+
+Copy config.json.template to config.json, and edit it to match your environment.
+
+Configuration
+=============
+
+server:port -- This is the port that the application listens on. This should
+    really be something above 1024, otherwise node needs to be run as root
+    which is strongly discouraged.
+
+client:port -- This is the port that the client connects back on. If the app is
+    behind a proxy, this should be set to the port that the proxy is listening
+    on. Otherwise, it should be the same as server:port above.
+
+mysql:* -- MySQL connection settings. See https://github.com/felixge/node-mysql
+    for all of the available connection options.
+
+asterisk:* -- Asterisk AMI connection settings
+
+ldap:* -- LDAP connectivity and configuration settings.
+
+  server:* -- See http://ldapjs.org/client.html for available options. At the
+    very least, `url` should be defined.
+  search:* -- See http://ldapjs.org/client.html for available options. At the
+    very least, `scope` should be defined.
+
+  bind:*  -- dn and password used to bind to the LDAP server.
+  base:   -- Base DN to perform user searches.
+  uidTag: -- Attribute to use as the username for user logins.
+  admin:  -- (optional) LDAP group to use as the admin group.
+
+session:key -- Name of the session cookie used by ampersand
+session:secret -- Secret used to encrypt the session key. A nice long random
+    string is ideal here.
+
+debug -- (optional) If true, debug messages are output to the node.js console.
