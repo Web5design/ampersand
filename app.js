@@ -26,16 +26,26 @@ var cookie = express.cookieParser(config.session.secret),
 // Passport Configuration
 var LDAPStrategy = require('./lib/passport-ldap').Strategy
 passport.use(new LDAPStrategy(config.ldap, function(profile, done) {
-    return done(null, JSON.parse(profile));
+    return done(null, profile);
 }));
+
+passport.serializeUser(function(user, done) {
+    done(null, JSON.stringify(user));
+});
+
+passport.deserializeUser(function(id, done) {
+    done(null, JSON.parse(id));
+});
 
 // Application Configuration
 app.configure(function() {
     app.set('port', process.env.PORT || config.server.port);
     app.set('views', __dirname + '/views');
     app.set('view engine', 'twig');
+    app.set('twig options', { strict_variables: false });
 
     app.use(express.static(path.join(__dirname, 'public')));
+    app.use(express.cookieParser());
     app.use(express.bodyParser());
 
     // Enable express sessions
@@ -44,17 +54,28 @@ app.configure(function() {
 
     // Enable passport middleware
     app.use(passport.initialize());
-//    app.use(passport.session());
-
-    // Configure twig.js
-    app.set('twig options', { strict_variables: false });
+    app.use(passport.session());
 });
 
 // Routes
-app.get('/', routes.index);
-app.get('/login', routes.login);
+app.get('/', restricted, routes.index);
+
+// Login/Logout
+app.get('/login', function(req, res) {
+    res.render('login');
+});
 app.post('/login', passport.authenticate('ldap', { successRedirect: '/',
                                                    failureRedirect: '/login' }));
+app.get('/logout', function(req, res) {
+    req.logout();
+    res.redirect('/login');
+});
+
+// Middleware function to restrict access to authenticated users.
+function restricted(req, res, next) {
+    if (req.isAuthenticated()) return next();
+    res.redirect('/login');
+}
 
 // Start the express server
 server.listen(app.get('port'), function() {
