@@ -18,11 +18,6 @@ var app = express(),
     io = socket.listen(server, { 'log level': 2 }),
     db = mysql.createConnection(config.mysql);
 
-// Session Handlers
-var cookie = express.cookieParser(config.session.secret),
-    store = new express.session.MemoryStore(),
-    session = express.session({ secret: config.session.secret, key: config.session.key, store: store });
-
 // Passport Configuration
 var LDAPStrategy = require('./lib/passport-ldap').Strategy
 passport.use(new LDAPStrategy(config.ldap, function(profile, done) {
@@ -49,8 +44,8 @@ app.configure(function() {
     app.use(express.bodyParser());
 
     // Enable express sessions
-    app.use(cookie);
-    app.use(session);
+    app.use(express.cookieSession({secret: config.session.secret, key: config.session.key}));
+    app.use(express.session({ secret: config.session.secret, key: config.session.key }));
 
     // Enable passport middleware
     app.use(passport.initialize());
@@ -73,11 +68,32 @@ app.get('/logout', function(req, res) {
 
 // Middleware function to restrict access to authenticated users.
 function restricted(req, res, next) {
+    console.log(req.user);
     if (req.isAuthenticated()) return next();
     res.redirect('/login');
 }
 
-// Start the express server
+// Socket.io authorization sharing with Express.
+io.configure(function () {
+    io.set('authorization', function(data, accept) {
+        express.cookieParser(config.session.secret)(data, {}, function(err) {
+            if (err || !data.signedCookies[config.session.key].passport.user) {
+                accept(null, false);
+            } else {
+                data.user = data.signedCookies[config.session.key].passport.user;
+                accept(null, true);
+            }
+        });
+    });
+});
+
+// Start the express server.
 server.listen(app.get('port'), function() {
     console.log('Express server listening on port ' + app.get('port'));
+});
+
+// Handle incoming socket.io connections from the client.
+io.sockets.on('connection', function(socket) {
+    // TODO
+    console.log(socket.handshake.user);
 });
