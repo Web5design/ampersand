@@ -3,8 +3,6 @@ var express = require('express'),
     http = require('http'),
     path = require('path'),
     mysql = require('mysql'),
-    fs = require('fs'),
-    glob = require('glob'),
     socket = require('socket.io'),
     passport = require('passport');
 
@@ -16,7 +14,13 @@ var routes = require('./routes'),
 var app = express(),
     server = http.createServer(app),
     io = socket.listen(server, { 'log level': 2 }),
-    db = mysql.createConnection(config.mysql);
+    db = mysql.createConnection(config.mysql),
+    ami = new(require('asterisk-manager'))(
+            config.asterisk.port,
+            config.asterisk.host,
+            config.asterisk.user,
+            config.asterisk.password,
+            true);
 
 // Passport Configuration
 var LDAPStrategy = require('./lib/passport-ldap').Strategy
@@ -92,8 +96,14 @@ server.listen(app.get('port'), function() {
     console.log('Express server listening on port ' + app.get('port'));
 });
 
-// Handle incoming socket.io connections from the client.
+// Listen for socket.io client callbacks
 io.sockets.on('connection', function(socket) {
-    // TODO
-    console.log(socket.handshake.user);
+    if (socket.handshake.user.admin) {
+        socket.join('admin');
+    } else {
+        socket.join(socket.handshake.user.id);
+    }
 });
+
+// Confbridge
+var confbridge = new (require('./lib/confbridge'))(db, ami, io);
