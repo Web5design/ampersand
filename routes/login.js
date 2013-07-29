@@ -1,3 +1,5 @@
 module.exports = function(req, res) {
-    res.render('login');
+    res.render('login', {
+        title: 'Login'
+    });
 }

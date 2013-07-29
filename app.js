@@ -6,7 +6,7 @@ var express = require('express'),
     socket = require('socket.io'),
     passport = require('passport');
 
-// Local Dependencies
+// Configuration
 var routes = require('./routes'),
     config = require('./config.json');
 
@@ -21,6 +21,9 @@ var app = express(),
             config.asterisk.user,
             config.asterisk.password,
             true);
+
+// Confbridge Controller
+var confbridge = new (require('./lib/confbridge'))(db, ami, io);
 
 // Passport Configuration
 var LDAPStrategy = require('./lib/passport-ldap').Strategy
@@ -58,23 +61,32 @@ app.configure(function() {
 
 // Routes
 app.get('/', restricted, routes.index);
+app.get('/confbridge/create', restricted, confbridge.random(config.conference.length), routes.confbridge.create)
+/*
+app.get('/view/:conference', restricted, routes.view);
+app.get('/edit/:conference', restricted, routes.edit);
+app.get('/delete/:conference', restricted, routes.edit);
+
+app.post('/save', restricted, confbridge.save);
+*/
 
 // Login/Logout
-app.get('/login', function(req, res) {
-    res.render('login');
-});
+app.get('/logout', routes.logout);
+app.get('/login', routes.login);
 app.post('/login', passport.authenticate('ldap', { successRedirect: '/',
                                                    failureRedirect: '/login' }));
-app.get('/logout', function(req, res) {
-    req.logout();
-    res.redirect('/login');
-});
 
 // Middleware function to restrict access to authenticated users.
 function restricted(req, res, next) {
-    console.log(req.user);
     if (req.isAuthenticated()) return next();
     res.redirect('/login');
+}
+
+// Middleware function to restrict access to admin users.
+function admin(req, res, next) {
+    if (req.user.admin) return next();
+    res.status(403);
+    res.render('403');
 }
 
 // Socket.io authorization sharing with Express.
@@ -105,5 +117,3 @@ io.sockets.on('connection', function(socket) {
     }
 });
 
-// Confbridge
-var confbridge = new (require('./lib/confbridge'))(db, ami, io);
