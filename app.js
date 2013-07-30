@@ -23,7 +23,7 @@ var app = express(),
             true);
 
 // Confbridge Controller
-var confbridge = new (require('./lib/confbridge'))(db, ami, io);
+var confbridge = new (require('./lib/confbridge'))(db, ami, io, config.confbridge);
 
 // Passport Configuration
 var LDAPStrategy = require('./lib/passport-ldap').Strategy
@@ -73,6 +73,7 @@ app.get('/confbridge/view/:conference', restricted, confbridge.load, routes.conf
 /*
 app.get('/delete/:conference', restricted, routes.edit);
 */
+app.get('/confbridge/recordings/:conference/:file', restricted, confbridge.load, routes.confbridge.recordings);
 
 app.post('/confbridge/save', restricted, confbridge.save);
 

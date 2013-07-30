@@ -7,6 +7,7 @@
 
         <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
         <script src="/socket.io/socket.io.js"></script>
+        <script src="/js/util.js"></script>
 
         <script>
             var socket = io.connect('http://' + window.location.hostname + ':{{ config.port }}');
@@ -53,6 +54,20 @@
                         document.getElementById('confbridgeMembers').innerHTML = html;
                         break;
 
+                    case 'confbridgerecordings':
+                        var html = '';
+                        for (var i = 0; i < evt.recordings.length; i++) {
+                            html += '<tr>' +
+                                '<td class="recordingtime">' + new Date(evt.recordings[i].stats.ctime).toString() + '</td>' +
+                                '<td class="recordingdownload"><a href="/confbridge/recordings/' + evt.conference + '/' + evt.recordings[i].file + '">' + evt.recordings[i].file + '</a></td>' +
+                                '<td class="recordingsize">' + getBytesWithUnit(evt.recordings[i].stats.size) + '</td>' +
+                                '<td class="recordingplay">[ <a href="javascript:void(0)" id="play/' + evt.recordings[i].file + '">Play</a> ]</td>' +
+                            '</tr>';
+                        }
+                        document.getElementById('recordinglist').innerHTML = html;
+                        document.getElementById('recordings').style.display = (evt.recordings.length) ? 'table-row' : 'none';
+                        break;
+
                     default: logConfbridgeEvent(evt);
                 }
 
@@ -90,7 +105,7 @@
                 // Play a recording
                 $(document).on('click', 'a[id^="play/"]', function() {
                     var html = '<audio controls autoplay>' +
-                        '<source src="/recordings/' + this.id.substring(5) + '" type="audio/wav">' +
+                        '<source src="/confbridge/recordings/{{ conference.conference }}/' + this.id.substring(5) + '" type="audio/wav">' +
                         '</audio>';
                     $(this).parent().html(html);
                 });
@@ -138,11 +153,11 @@
             {% endif %}
 
             {% if (conference.admin) %}
-            <tr class="recordings">
+            <tr id="recordings" class="recordings">
                 <td class="label">Recordings</td>
                 <td>
                     <div class="scrollable">
-                        <table id="recordings"></table>
+                        <table class="recordings" id="recordinglist" cellpadding="0" cellspacing="0"></table>
                     </div>
                 </td>
             </tr>

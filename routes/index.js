@@ -13,3 +13,4 @@ exports.confbridge = {};
 exports.confbridge.create = require('./confbridge/create');
 exports.confbridge.view = require('./confbridge/view');
 exports.confbridge.edit = require('./confbridge/edit');
+exports.confbridge.recordings = require('./confbridge/recordings');
