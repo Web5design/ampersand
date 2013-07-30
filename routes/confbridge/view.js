@@ -3,6 +3,6 @@ module.exports = function(req, res) {
         'title': 'View Conference',
         'admin': req.user.admin,
         'conference': req.conference,
-        'dial': req.config.dial
+        'dial': req.config.confbridge.dial
     });
 }
