@@ -26,6 +26,14 @@ tr:hover {
     background-color: #ffffee;
 }
 
+th {
+    text-align: left;
+    background-color: #cccccc;
+    padding: 5px;
+    border-bottom: 1px solid #666666;
+    white-space: nowrap;
+}
+
 td {
     padding: 7px;
     vertical-align: top;
@@ -55,4 +63,9 @@ ul.menu li:first-child:before {
 }
 ul.menu li:last-child:after {
     content: " ]";
+}
+
+div.scrollable {
+    max-height: 250px;
+    overflow: auto;
 }

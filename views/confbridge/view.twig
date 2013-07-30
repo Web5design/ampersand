@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{{ title }}</title>
+        <link rel="stylesheet" href="/css/ampersand.css" />
+        <link rel="stylesheet" href="/css/confbridge/view.css" />
+
+        <script src="/socket.io/socket.io.js"></script>
+
+        <script>
+        </script>
+
+    </head>
+    <body>
+        <h1>{{ title }}</h1>
+        {% include 'menu.twig' %}
+        <table>
+            <tr>
+                <td class="label">Conference Name</td>
+                <td>{{ conference.name }}</td>
+            </tr>
+            <tr>
+                <td class="label">Conference Number</td>
+                <td>{{ conference.conference }}</td>
+            </tr>
+            <tr>
+                <td class="label">Owner</td>
+                <td>{{ conference.owner }}</td>
+            </tr>
+            <tr>
+                <td class="label">Options</td>
+                <td>
+                    <ul class="options">
+                        {% if (conference.music_on_hold_when_empty) %}<li>Music on Hold When Empty</li>{% endif %}
+                        {% if (conference.quiet) %}<li>Quiet</li>{% endif %}
+                        {% if (conference.announce_join_leave) %}<li>Announce Join/Leave</li>{% endif %}
+                        {% if (conference.record_conference) %}<li>Record Conference</li>{% endif %}
+                    </ul>
+                </td>
+            </tr>
+
+            {% if (dial) %}
+            <tr>
+                <td class="label">Invite</td>
+                <td>
+                    Dial: {{ dial }}<br />
+                    Conference Number {{ conference.conference }}
+                </td>
+            </tr>
+            {% endif %}
+
+            {% if (conference.privileged) %}
+            <tr>
+                <td class="label">Recordings</td>
+                <td>
+                    <div class="scrollable">
+                        <table id="recordings"></table>
+                    </div>
+                </td>
+            </tr>
+            {% endif %}
+
+        </table>
+
+        <ul class="menu">
+            {% if (conference.privileged) %}
+            <li><a href="/confbridge/edit/{{ conference.conference }}">Edit</a></li>
+            <li><a href="/confbridge/delete/{{ conference.conference }}">Delete</a></li>
+            {% endif %}
+        </ul>
+
+        {% if (conference.privileged) %}
+        <table>
+            <caption>Conference Participants</caption>
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Talking</th>
+                    <th>Channel</th>
+                    <th>Caller ID Number</th>
+                    <th>Caller ID Name</th>
+                </tr>
+            </thead>
+            <tbody id="confbridgeMembers">
+            </tbody>
+        </table>
+
+        <div class="scrollable">
+            <table id="confbridgeLog">
+                <caption>Conference Event Log</caption>
+                <tr>
+                    <th>Event</th>
+                    <th>Channel</th>
+                </tr>
+            </table>
+        </div>
+        {% endif %}
+
+    </body>
+</html>

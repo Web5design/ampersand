@@ -27,6 +27,15 @@
                         This is the code the caller will dial to join the conference. We generated a unique code for you. Feel free to change it.
                     </td>
                 </tr>
+                {% if (admin) %}
+                <tr>
+                    <td class="label">Owner</td>
+                    <td><input type="text" name="owner" size="30" value="{{ conference.owner }}" /></td>
+                    <td class="info">
+                        Owner of this conference.
+                    </td>
+                </tr>
+                {% endif %}
                 <tr>
                     <td class="label">Music on Hold When Empty</td>
                     <td><input type="checkbox" name="music_on_hold_when_empty" {% if conference.music_on_hold_when_empty == 1 %}checked="checked" {% endif %}/></td>
@@ -44,22 +53,6 @@
                         When enabled enter/leave prompts and user intros are not played.
                         There are some prompts, such as the prompt to enter a PIN number,
                         that must be played regardless of what this option is set to.
-                    </td>
-                </tr>
-                <tr>
-                    <td class="label">Announce User Count</td>
-                    <td><input type="checkbox" name="announce_user_count" {% if conference.announce_user_count == 1 %}checked="checked" {% endif %}/></td>
-                    <td class="info">
-                        Sets if the number of users should be announced to the
-                        caller.
-                    </td>
-                </tr>
-                <tr>
-                    <td class="label">Announce Only User</td>
-                    <td><input type="checkbox" name="announce_only_user" {% if conference.announce_only_user == 1 %}checked="checked" {% endif %}/></td>
-                    <td class="info">
-                        Sets if the only user announcement should be played
-                        when a channel enters a empty conference.
                     </td>
                 </tr>
                 <tr>
