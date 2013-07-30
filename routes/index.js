@@ -6,11 +6,15 @@ exports.index = function(req, res) {
     });
 }
 
-exports.login = require('./login');
-exports.logout = require('./logout');
+exports.login = function(req, res) {
+    res.render('login', {
+        title: 'Login'
+    });
+}
 
-exports.confbridge = {};
-exports.confbridge.create = require('./confbridge/create');
-exports.confbridge.view = require('./confbridge/view');
-exports.confbridge.edit = require('./confbridge/edit');
-exports.confbridge.recordings = require('./confbridge/recordings');
+exports.logout = function(req, res) {
+    req.logout();
+    res.redirect('/login');
+}
+
+exports.confbridge = require('./confbridge');
