@@ -9,4 +9,4 @@ exports.logout = require('./logout');
 
 exports.confbridge = {};
 exports.confbridge.edit = require('./confbridge/edit');
-exports.confbridge.create = require('./confbridge/edit');
+exports.confbridge.create = require('./confbridge/create');

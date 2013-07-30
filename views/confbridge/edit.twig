@@ -3,12 +3,12 @@
     <head>
         <title>{{ title }}</title>
         <link rel="stylesheet" href="/css/ampersand.css" />
-        <link rel="stylesheet" href="/css/confbridge-edit.css" />
+        <link rel="stylesheet" href="/css/confbridge/edit.css" />
     </head>
     <body>
         <h1>{{ title }}</h1>
         {% include 'menu.twig' %}
-        <form action="/save" method="post">
+        <form action="/confbridge/save" method="post">
             {% if conference.id %}
             <input type="hidden" name="id" value="{{ conference.id }}" />
             {% endif %}
@@ -22,26 +22,67 @@
                 </tr>
                 <tr>
                     <td class="label">Conference Number</td>
-                    <td><input type="text" name="name" size="30" value="{{ conference.conference }}" /></td>
+                    <td><input type="text" name="conference" size="30" value="{{ conference.conference }}" /></td>
                     <td class="info">
                         This is the code the caller will dial to join the conference. We generated a unique code for you. Feel free to change it.
                     </td>
                 </tr>
                 <tr>
-                    <td class="label">Max Members</td>
-                    <td><input type="text" name="max_members" size="30" value="{{ conference.max_members }}" /></td>
+                    <td class="label">Music on Hold When Empty</td>
+                    <td><input type="checkbox" name="music_on_hold_when_empty" {% if conference.music_on_hold_when_empty == 1 %}checked="checked" {% endif %}/></td>
                     <td class="info">
-                        This option limits the number of participants for a single conference to a specific number. By default conferences have no participant limit. After the limit is reached, the conference will be locked until someone leaves.
+                        Sets whether MOH should be played when only
+                        one person is in the conference or when the
+                        the user is waiting on a marked user to enter
+                        the conference.
                     </td>
                 </tr>
                 <tr>
-                    <td class="label">Start Muted</td>
-                    <td><input type="checkbox" name="startmuted" {% if conference.startmuted == 1 %}checked="checked" {% endif %}/></td>
+                    <td class="label">Quiet</td>
+                    <td><input type="checkbox" name="quiet" {% if conference.quiet == 1 %}checked="checked" {% endif %}/></td>
                     <td class="info">
-                        Check to enable all participants to be muted when the conference begins. You may unmute the conference by (insert instructions here).
+                        When enabled enter/leave prompts and user intros are not played.
+                        There are some prompts, such as the prompt to enter a PIN number,
+                        that must be played regardless of what this option is set to.
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">Announce User Count</td>
+                    <td><input type="checkbox" name="announce_user_count" {% if conference.announce_user_count == 1 %}checked="checked" {% endif %}/></td>
+                    <td class="info">
+                        Sets if the number of users should be announced to the
+                        caller.
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">Announce Only User</td>
+                    <td><input type="checkbox" name="announce_only_user" {% if conference.announce_only_user == 1 %}checked="checked" {% endif %}/></td>
+                    <td class="info">
+                        Sets if the only user announcement should be played
+                        when a channel enters a empty conference.
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">Announce Join/Leave</td>
+                    <td><input type="checkbox" name="announce_join_leave" {% if conference.announce_join_leave == 1 %}checked="checked" {% endif %}/></td>
+                    <td class="info">
+                        When enabled, this option will prompt the user for a
+                        name when entering the conference.  After the name is
+                        recorded, it will be played as the user enters and exists
+                        the conference.
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">Record Conference</td>
+                    <td><input type="checkbox" name="record_conference" {% if conference.record_conference == 1 %}checked="checked" {% endif %}/></td>
+                    <td class="info">
+                        Records the conference call starting when the first user
+                        enters the room, and ending when the last user exits the room.
                     </td>
                 </tr>
             </table>
+            <input type="submit" value="Save" name="save" />
+            <input type="submit" value="Cancel" name="cancel" />
         </form>
     </body>
 </html>

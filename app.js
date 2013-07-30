@@ -62,13 +62,13 @@ app.configure(function() {
 // Routes
 app.get('/', restricted, routes.index);
 app.get('/confbridge/create', restricted, confbridge.random(config.conference.length), routes.confbridge.create)
+app.get('/confbridge/edit/:conference', restricted, confbridge.load, routes.confbridge.edit);
 /*
 app.get('/view/:conference', restricted, routes.view);
-app.get('/edit/:conference', restricted, routes.edit);
 app.get('/delete/:conference', restricted, routes.edit);
-
-app.post('/save', restricted, confbridge.save);
 */
+
+app.post('/confbridge/save', restricted, confbridge.save);
 
 // Login/Logout
 app.get('/logout', routes.logout);

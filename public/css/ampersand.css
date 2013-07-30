@@ -8,6 +8,33 @@ a {
 table { 
     border-spacing:0;
     border-collapse:collapse;
+    border: 1px solid black;
+    width: 100%;
+    margin-bottom: 10px;
+}
+caption {
+    text-align: left;
+}
+
+tr:nth-child(even) {
+    background: #dddddd;
+}
+tr:nth-child(odd) {
+    background: #eeeeee;
+}
+tr:hover {
+    background-color: #ffffee;
+}
+
+td {
+    padding: 7px;
+    vertical-align: top;
+}
+td.label {
+    width: 1px;
+    white-space: nowrap;
+    font-weight: bold;
+    text-align: right;
 }
 
 ul.menu, ul.mainmenu {
