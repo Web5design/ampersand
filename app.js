@@ -113,13 +113,3 @@ io.configure(function () {
 server.listen(app.get('port'), function() {
     console.log('Express server listening on port ' + app.get('port'));
 });
-
-// Listen for socket.io client callbacks
-io.sockets.on('connection', function(socket) {
-    if (socket.handshake.user.admin) {
-        socket.join('admin');
-    } else {
-        socket.join(socket.handshake.user.id);
-    }
-});
-
