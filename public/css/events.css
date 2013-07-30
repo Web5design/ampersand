@@ -3,6 +3,7 @@
     width: 100%;
     overflow: scroll;
     border: 1px solid black;
+    background: #f6f6f6;
 }
 
 #eventlog ul {
