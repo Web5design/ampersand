@@ -5,18 +5,16 @@
         <link rel="stylesheet" href="/css/ampersand.css" />
         <link rel="stylesheet" href="/css/confbridge/view.css" />
 
+        <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
         <script src="/socket.io/socket.io.js"></script>
 
         <script>
             var socket = io.connect('http://' + window.location.hostname + ':{{ config.port }}');
+            var channel = {};
 
             socket.on('connect', function() {
                 // Register with the server for this conference
                 socket.emit('confbridge', {{ conference.conference }});
-                // Request a list of participants
-                socket.emit('confbridgelist', {{ conference.conference }});
-                // Request a list of recordings
-                socket.emit('confbridgerecordings', {{ conference.conference }});
             });
 
             // Handle confbridge events.
@@ -24,6 +22,36 @@
                 console.log(evt);
 
                 switch (evt.event.toLowerCase()) {
+
+                    case 'confbridgetalking':
+                        var talking = evt.talkingstatus == 'on' ? 'Yes' : 'No';
+                        channel[evt.channel] = talking;
+                        document.getElementById(evt.channel).innerHTML = talking;
+                        break;
+
+                    case 'confbridgemute':
+                        logConfbridgeEvent(evt);
+                        document.getElementById(evt.channel).innerHTML = 'Muted';
+                        break;
+
+                    case 'confbridgeunmute':
+                        logConfbridgeEvent(evt);
+                        document.getElementById(evt.channel).innerHTML = (channel[evt.channel]) ? channel[evt.channel] : '';
+                        break;
+
+                    case 'confbridgelistcomplete':
+                        var html = '';
+                        for (var i = 0; i < evt.list.length; i++) {
+                            html += '<tr id="channel/' + evt.list[i].channel + '">' +
+                                '<td class="action">[ <a href="javascript:void(0)" id="mute/' + evt.list[i].channel + '">mute</a> | <a href="javascript:void(0)" id="unmute/' + evt.list[i].channel + '">unmute</a> | <a href="javascript:void(0)" id="kick/' + evt.list[i].channel + '">kick</a> ]</td>' +
+                                '<td id="' + evt.list[i].channel + '"></td>' +
+                                '<td>' + evt.list[i].channel + '</td>' +
+                                '<td>' + evt.list[i].calleridnum + '</td>' +
+                                '<td>' + evt.list[i].calleridname + '</td>' +
+                                '</tr>';
+                        }
+                        document.getElementById('confbridgeMembers').innerHTML = html;
+                        break;
 
                     default: logConfbridgeEvent(evt);
                 }
@@ -41,6 +69,32 @@
                     '<td><ul class="logentry">' + details + '</ul></td>' +
                     '</tr>';
             }
+
+            // Jquery events
+            $( document ).ready(function() {
+                // Handle muting a channel
+                $(document).on('click', 'a[id^="mute/"]', function() {
+                    socket.emit('confbridge/mute', this.id.substring(5));
+                });
+
+                // Handle unmuting a channel
+                $(document).on('click', 'a[id^="unmute/"]', function() {
+                    socket.emit('confbridge/unmute', this.id.substring(7));
+                });
+
+                // Handle kicking a channel
+                $(document).on('click', 'a[id^="kick/"]', function() {
+                    socket.emit('confbridge/kick', this.id.substring(5));
+                });
+
+                // Play a recording
+                $(document).on('click', 'a[id^="play/"]', function() {
+                    var html = '<audio controls autoplay>' +
+                        '<source src="/recordings/' + this.id.substring(5) + '" type="audio/wav">' +
+                        '</audio>';
+                    $(this).parent().html(html);
+                });
+            });
 
         </script>
 
@@ -83,7 +137,7 @@
             </tr>
             {% endif %}
 
-            {% if (conference.privileged) %}
+            {% if (conference.admin) %}
             <tr class="recordings">
                 <td class="label">Recordings</td>
                 <td>
@@ -97,7 +151,7 @@
         </table>
 
         <ul class="menu">
-            {% if (conference.privileged) %}
+            {% if (conference.admin) %}
             <li><a href="/confbridge/edit/{{ conference.conference }}">Edit</a></li>
             <li><a href="/confbridge/delete/{{ conference.conference }}">Delete</a></li>
             {% endif %}
@@ -106,7 +160,7 @@
             {% endif %}
         </ul>
 
-        {% if (conference.privileged) %}
+        {% if (conference.admin) %}
         <table>
             <caption>Conference Participants</caption>
             <thead>
@@ -122,15 +176,17 @@
             </tbody>
         </table>
 
-        <div class="scrollable">
-            <table id="confbridgeLog">
-                <caption>Conference Event Log</caption>
+        <table>
+            <caption>Conference Event Log</caption>
+            <thead>
                 <tr>
                     <th>Event</th>
                     <th>Channel</th>
                 </tr>
-            </table>
-        </div>
+            </thead>
+            <tbody class="scrollable" id="confbridgeLog">
+            </tbody>
+        </table>
         {% endif %}
 
     </body>
