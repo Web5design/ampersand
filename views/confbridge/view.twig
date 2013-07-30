@@ -11,6 +11,8 @@
             var socket = io.connect('http://' + window.location.hostname + ':{{ config.port }}');
 
             socket.on('connect', function() {
+                // Register with the server for this conference
+                socket.emit('confbridge', {{ conference.conference }});
                 // Request a list of participants
                 socket.emit('confbridgelist', {{ conference.conference }});
                 // Request a list of recordings
@@ -18,9 +20,23 @@
             });
 
             // Handle confbridge events.
-            socket.on('confbridgeEvent', function(event) {
-                console.log(event);
+            socket.on('confbridgeEvent', function(evt) {
+                console.log(evt);
+
+                switch (evt.event.toLowerCase()) {
+
+                    default: logConfbridgeEvent(evt);
+                }
+
             });
+
+            // Add event to event log.
+            function logConfbridgeEvent(evt) {
+                document.getElementById('confbridgeLog').innerHTML += '<tr>' +
+                    '<td>' + evt.event + '</td>' +
+                    '<td>' + evt.channel + '</td>' +
+                    '</tr>';
+            }
 
         </script>
 
