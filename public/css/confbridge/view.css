@@ -3,3 +3,7 @@ ul.options {
     padding: 0;
     list-style-type: none;
 }
+
+tr.recordings {
+    display: none;
+}

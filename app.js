@@ -23,7 +23,7 @@ var app = express(),
             true);
 
 // Confbridge Controller
-var confbridge = new (require('./lib/confbridge'))(db, ami, io, config);
+var confbridge = new (require('./lib/confbridge'))(db, ami, io);
 
 // Passport Configuration
 var LDAPStrategy = require('./lib/passport-ldap').Strategy
@@ -57,11 +57,17 @@ app.configure(function() {
     // Enable passport middleware
     app.use(passport.initialize());
     app.use(passport.session());
+
+    // Add config to request object
+    app.use(function(req, res, next) {
+        req.config = config;
+        next();
+    });
 });
 
 // Routes
 app.get('/', restricted, confbridge.listRooms, routes.index);
-app.get('/confbridge/create', restricted, confbridge.random(config.conference.length), routes.confbridge.create)
+app.get('/confbridge/create', restricted, confbridge.create, routes.confbridge.create)
 app.get('/confbridge/edit/:conference', restricted, confbridge.load, routes.confbridge.edit);
 app.get('/confbridge/view/:conference', restricted, confbridge.load, routes.confbridge.view);
 /*
