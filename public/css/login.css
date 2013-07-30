@@ -1,0 +1,12 @@
+table {
+    border: none;
+}
+tr {
+    background: none;
+}
+tr:nth-child(even) {
+    background: none;
+}
+tr:nth-child(odd) {
+    background: none;
+}

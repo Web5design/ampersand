@@ -17,14 +17,14 @@
                     <td class="label">Conference Name</td>
                     <td><input type="text" name="name" size="30" value="{{ conference.name }}" /></td>
                     <td class="info">
-                        Enter a brief name for the conference so you can describe which conference to join.
+                        Enter a human friendly name for this conference.
                     </td>
                 </tr>
                 <tr>
                     <td class="label">Conference Number</td>
                     <td><input type="text" name="conference" size="30" value="{{ conference.conference }}" /></td>
                     <td class="info">
-                        This is the code the caller will dial to join the conference. We generated a unique code for you. Feel free to change it.
+                        This is the unique conference number callers will input to join the conference. You may use a custom conference number of any length.
                     </td>
                 </tr>
                 {% if (admin) %}
@@ -37,40 +37,31 @@
                 </tr>
                 {% endif %}
                 <tr>
-                    <td class="label">Music on Hold When Empty</td>
+                    <td class="label">Play Hold Music</td>
                     <td><input type="checkbox" name="music_on_hold_when_empty" {% if conference.music_on_hold_when_empty == 1 %}checked="checked" {% endif %}/></td>
                     <td class="info">
-                        Sets whether MOH should be played when only
-                        one person is in the conference or when the
-                        the user is waiting on a marked user to enter
-                        the conference.
+                        Play music when only one person is in the conference.
                     </td>
                 </tr>
                 <tr>
                     <td class="label">Quiet</td>
                     <td><input type="checkbox" name="quiet" {% if conference.quiet == 1 %}checked="checked" {% endif %}/></td>
                     <td class="info">
-                        When enabled enter/leave prompts and user intros are not played.
-                        There are some prompts, such as the prompt to enter a PIN number,
-                        that must be played regardless of what this option is set to.
+                        When enabled, callers will not be asked to record their names and entry/exit chimes will not be played.
                     </td>
                 </tr>
                 <tr>
                     <td class="label">Announce Join/Leave</td>
                     <td><input type="checkbox" name="announce_join_leave" {% if conference.announce_join_leave == 1 %}checked="checked" {% endif %}/></td>
                     <td class="info">
-                        When enabled, this option will prompt the user for a
-                        name when entering the conference.  After the name is
-                        recorded, it will be played as the user enters and exists
-                        the conference.
+                        Prompts callers to record their name to announce to the group when they join or leave the conference.
                     </td>
                 </tr>
                 <tr>
                     <td class="label">Record Conference</td>
                     <td><input type="checkbox" name="record_conference" {% if conference.record_conference == 1 %}checked="checked" {% endif %}/></td>
                     <td class="info">
-                        Records the conference call starting when the first user
-                        enters the room, and ending when the last user exits the room.
+                        Record the conference calls to play back at a later time.
                     </td>
                 </tr>
             </table>
