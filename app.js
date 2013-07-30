@@ -22,7 +22,7 @@ var app = express(),
             config.asterisk.password,
             true);
 
-// Confbridge Controller
+var ampersand = new (require('./lib/ampersand'))(ami, io);
 var confbridge = new (require('./lib/confbridge'))(db, ami, io, config.confbridge);
 
 // Passport Configuration
@@ -67,6 +67,7 @@ app.configure(function() {
 
 // Routes
 app.get('/', restricted, confbridge.listRooms, routes.index);
+app.get('/events', restricted, admin, routes.events);
 
 app.get('/confbridge/create', restricted, confbridge.create, routes.confbridge.create)
 app.get('/confbridge/edit/:conference', restricted, confbridge.load, routes.confbridge.edit);

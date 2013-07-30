@@ -1,7 +1,8 @@
 <ul class="mainmenu">
 <li><a href="/">Dashboard</a></li>
 <li><a href="/confbridge/create">Create a Conference</a></li>
-{% if (controls) %}<li><a href="/confbridge/controls">Conference Controls</a></li>{% endif %}
-{% if (recordings) %}<li><a href="/confbridge/recordings">Recordings</a></li>{% endif %}
+{% if (admin) %}
+<li><a href="/events">Event Log</a></li>
+{% endif %}
 <li><a href="/logout">Logout</a></li>
 </ul>

@@ -17,4 +17,12 @@ exports.logout = function(req, res) {
     res.redirect('/login');
 }
 
+exports.events = function(req, res) {
+    res.render('events', {
+        title: 'Event Log',
+        admin: req.user.admin,
+        socket: { port: req.config.client.port }
+    });
+}
+
 exports.confbridge = require('./confbridge');

@@ -1,0 +1,35 @@
+#eventlog {
+    height: 500px;
+    width: 100%;
+    overflow: scroll;
+    border: 1px solid black;
+}
+
+#eventlog ul {
+    margin: 0;
+    padding: 3px;
+    list-style-type: none;
+}
+
+#eventlog ul li {
+    display: inline;
+}
+
+#eventlog ul li:after {
+    content: " | ";
+}
+
+#eventlog ul li:last-child:after {
+    content: none;
+}
+
+#eventlog ul li:first-child {
+    font-weight: bold;
+}
+
+#eventlog div:nth-child(even) {
+    background: #dddddd;
+}
+#eventlog div:nth-child(odd) {
+    background: #eeeeee;
+}

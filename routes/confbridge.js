@@ -10,6 +10,7 @@ exports.view = function(req, res) {
     res.render('confbridge/view', {
         'title': 'View Conference',
         'admin': req.user.admin,
+        'socket': { port: req.config.client.port },
         'conference': req.conference,
         'dial': req.config.confbridge.dial
     });

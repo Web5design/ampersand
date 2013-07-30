@@ -10,7 +10,7 @@
         <script src="/js/util.js"></script>
 
         <script>
-            var socket = io.connect('http://' + window.location.hostname + ':{{ config.port }}');
+            var socket = io.connect('http://' + window.location.hostname + ':{{ socket.port }}');
             var channel = {};
 
             socket.on('connect', function() {
@@ -81,7 +81,7 @@
                 }
                 document.getElementById('confbridgeLog').innerHTML += '<tr>' +
                     '<td>' + evt.event + '</td>' +
-                    '<td><ul class="logentry">' + details + '</ul></td>' +
+                    '<td><ul class="log">' + details + '</ul></td>' +
                     '</tr>';
             }
 
@@ -196,7 +196,7 @@
             <thead>
                 <tr>
                     <th>Event</th>
-                    <th>Channel</th>
+                    <th>Details</th>
                 </tr>
             </thead>
             <tbody class="scrollable" id="confbridgeLog">

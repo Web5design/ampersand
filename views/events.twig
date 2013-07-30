@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{{ title }}</title>
+        <link rel="stylesheet" href="/css/ampersand.css" />
+        <link rel="stylesheet" href="/css/events.css" />
+
+        <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
+    </head>
+    <body>
+
+        <script>
+            var socket = io.connect('http://' + window.location.hostname + ':{{ socket.port }}');
+
+            socket.on('connect', function() {
+                socket.emit('managerevent');
+            });
+
+            socket.on('managerevent', function(evt) {
+                var html = '<div><ul class="log">';
+                for (var key in evt) {
+                    html += '<li>' + key + ': ' + evt[key] + '</li>';
+                }
+                html += '</ul></div>';
+                $('#eventlog').append(html);
+                tailScroll();
+            });
+
+            function tailScroll() {
+                var height = $('#eventlog').get(0).scrollHeight;
+                $('#eventlog').animate({
+                    scrollTop: height
+                }, 100);
+            }
+
+            $( document ).ready(function() {
+                var logHeight = $(window).height() - 200;
+                $('#eventlog').css({'height': logHeight + 'px'});
+            });
+
+        </script>
+
+        <h1>{{ title }}</h1>
+        {% include 'menu.twig' %}
+
+        <div id="eventlog">
+        </div>
+
+    </body>
+</html>
