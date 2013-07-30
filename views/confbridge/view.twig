@@ -32,9 +32,13 @@
 
             // Add event to event log.
             function logConfbridgeEvent(evt) {
+                var details = '';
+                for (var key in evt) {
+                    details += '<li>' + key + ': ' + evt[key] + '</li>';
+                }
                 document.getElementById('confbridgeLog').innerHTML += '<tr>' +
                     '<td>' + evt.event + '</td>' +
-                    '<td>' + evt.channel + '</td>' +
+                    '<td><ul class="logentry">' + details + '</ul></td>' +
                     '</tr>';
             }
 
