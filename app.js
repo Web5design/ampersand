@@ -60,7 +60,7 @@ app.configure(function() {
 });
 
 // Routes
-app.get('/', restricted, routes.index);
+app.get('/', restricted, confbridge.listRooms, routes.index);
 app.get('/confbridge/create', restricted, confbridge.random(config.conference.length), routes.confbridge.create)
 app.get('/confbridge/edit/:conference', restricted, confbridge.load, routes.confbridge.edit);
 app.get('/confbridge/view/:conference', restricted, confbridge.load, routes.confbridge.view);

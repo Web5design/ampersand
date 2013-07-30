@@ -11,5 +11,22 @@
     <body>
         <h1>{{ title }}</h1>
         {% include 'menu.twig' %}
+
+        <table>
+            <caption>Conferences</caption>
+            <tr>
+                <th>Conference Number</th>
+                <th>Name</th>
+                <th>Owner</th>
+            </tr>
+            {% for conference in confbridge %}
+            <tr>
+                <td><a href="/confbridge/view/{{ conference.conference }}">{{ conference.conference }}</a></td>
+                <td>{{ conference.name }}</td>
+                <td>{{ conference.owner }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+
     </body>
 </html>
