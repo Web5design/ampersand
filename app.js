@@ -102,7 +102,7 @@ io.configure(function () {
             if (err || !data.signedCookies[config.session.key].passport.user) {
                 accept(null, false);
             } else {
-                data.user = data.signedCookies[config.session.key].passport.user;
+                data.user = JSON.parse(data.signedCookies[config.session.key].passport.user);
                 accept(null, true);
             }
         });
