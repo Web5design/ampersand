@@ -1,3 +1,11 @@
 #inprogress {
     display: none;
 }
+
+td.conference_name {
+    width: 100%;
+}
+
+td.parties {
+    width: 100%;
+}

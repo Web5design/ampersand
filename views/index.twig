@@ -22,7 +22,7 @@
                         for (var i = 0; i < evt.list.length; i++) {
                             html += '<tr id="conference/' + evt.list[i].conference + '">' +
                                 '<td><a href="/confbridge/view/' + evt.list[i].conference + '">' + evt.list[i].conference + '</a></td>' +
-                                '<td>' + evt.list[i].parties + '</td>' +
+                                '<td class="parties">' + evt.list[i].parties + '</td>' +
                                 '</tr>';
                         }
                         document.getElementById('inprogresslist').innerHTML = html;
@@ -39,7 +39,7 @@
         <table id="inprogress">
             <caption>Conferences In Progress</caption>
             <tr>
-                <th>Conference Number</th>
+                <th>Conference</th>
                 <th>Participants</th>
             </tr>
             <tbody id="inprogresslist">
@@ -50,7 +50,7 @@
         <table>
             <caption>Permanent Conferences</caption>
             <tr>
-                <th>Conference Number</th>
+                <th>Conference</th>
                 <th>Name</th>
                 <th>Owner</th>
                 <th>Expiration</th>
@@ -58,7 +58,7 @@
             {% for conference in confbridge.permanent %}
             <tr>
                 <td><a href="/confbridge/view/{{ conference.conference }}">{{ conference.conference }}</a></td>
-                <td>{{ conference.name }}</td>
+                <td class="conference_name">{{ conference.name }}</td>
                 <td>{{ conference.owner }}</td>
                 <td>{% if (conference.expiration) %}{{ conference.expiration }}{% else %}None{% endif %}</td>
             </tr>
@@ -70,7 +70,7 @@
         <table>
             <caption>Active Conferences</caption>
             <tr>
-                <th>Conference Number</th>
+                <th>Conference</th>
                 <th>Name</th>
                 <th>Owner</th>
                 <th>Expiration</th>
@@ -78,7 +78,7 @@
             {% for conference in confbridge.active %}
             <tr>
                 <td><a href="/confbridge/view/{{ conference.conference }}">{{ conference.conference }}</a></td>
-                <td>{{ conference.name }}</td>
+                <td class="conference_name">{{ conference.name }}</td>
                 <td>{{ conference.owner }}</td>
                 <td>{% if (conference.expiration) %}{{ conference.expiration }}{% else %}None{% endif %}</td>
             </tr>
@@ -90,7 +90,7 @@
         <table>
             <caption>Expired Conferences</caption>
             <tr>
-                <th>Conference Number</th>
+                <th>Conference</th>
                 <th>Name</th>
                 <th>Owner</th>
                 <th>Expiration</th>
@@ -98,7 +98,7 @@
             {% for conference in confbridge.expired %}
             <tr>
                 <td><a href="/confbridge/view/{{ conference.conference }}">{{ conference.conference }}</a></td>
-                <td>{{ conference.name }}</td>
+                <td class="conference_name">{{ conference.name }}</td>
                 <td>{{ conference.owner }}</td>
                 <td>{% if (conference.expiration) %}{{ conference.expiration }}{% else %}None{% endif %}</td>
             </tr>

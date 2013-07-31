@@ -39,11 +39,11 @@ th {
 
 td {
     padding: 7px;
+    width: 1px;
+    white-space: nowrap;
     vertical-align: top;
 }
 td.label {
-    width: 1px;
-    white-space: nowrap;
     font-weight: bold;
     text-align: right;
 }
