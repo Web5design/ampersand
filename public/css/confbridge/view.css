@@ -8,17 +8,24 @@ tr.recordings {
     display: none;
 }
 
-table.controls {
+table.controls, table.recordings{
     background: none;
     border: none;
     margin: 0;
 }
-table.controls tr {
+table.controls tr, table.recordings tr {
     background: none;
 }
-table.controls tr:hover {
+table.controls tr:hover, table.recordings tr:hover {
     background: none;
 }
 table.controls td {
-    padding: 1px;
+    padding: 2px;
+}
+
+table.recordings tr:first-child td {
+    padding-top: 0;
+}
+table.recordings tr:last-child td {
+    padding-bottom: 0;
 }
