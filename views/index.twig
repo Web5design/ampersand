@@ -12,21 +12,65 @@
         <h1>{{ title }}</h1>
         {% include 'menu.twig' %}
 
+        {% if (confbridge.permanent|length) %}
         <table>
-            <caption>Conferences</caption>
+            <caption>Permanent Conferences</caption>
             <tr>
                 <th>Conference Number</th>
                 <th>Name</th>
                 <th>Owner</th>
+                <th>Expiration</th>
             </tr>
-            {% for conference in confbridge %}
+            {% for conference in confbridge.permanent %}
             <tr>
                 <td><a href="/confbridge/view/{{ conference.conference }}">{{ conference.conference }}</a></td>
                 <td>{{ conference.name }}</td>
                 <td>{{ conference.owner }}</td>
+                <td>{% if (conference.expiration) %}{{ conference.expiration }}{% else %}None{% endif %}</td>
             </tr>
             {% endfor %}
         </table>
+        {% endif %}
+
+        {% if (confbridge.active|length) %}
+        <table>
+            <caption>Active Conferences</caption>
+            <tr>
+                <th>Conference Number</th>
+                <th>Name</th>
+                <th>Owner</th>
+                <th>Expiration</th>
+            </tr>
+            {% for conference in confbridge.active %}
+            <tr>
+                <td><a href="/confbridge/view/{{ conference.conference }}">{{ conference.conference }}</a></td>
+                <td>{{ conference.name }}</td>
+                <td>{{ conference.owner }}</td>
+                <td>{% if (conference.expiration) %}{{ conference.expiration }}{% else %}None{% endif %}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% endif %}
+
+        {% if (confbridge.expired|length) %}
+        <table>
+            <caption>Expired Conferences</caption>
+            <tr>
+                <th>Conference Number</th>
+                <th>Name</th>
+                <th>Owner</th>
+                <th>Expiration</th>
+            </tr>
+            {% for conference in confbridge.expired %}
+            <tr>
+                <td><a href="/confbridge/view/{{ conference.conference }}">{{ conference.conference }}</a></td>
+                <td>{{ conference.name }}</td>
+                <td>{{ conference.owner }}</td>
+                <td>{% if (conference.expiration) %}{{ conference.expiration }}{% else %}None{% endif %}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% endif %}
 
     </body>
 </html>
