@@ -2,6 +2,7 @@ exports.index = function(req, res) {
     res.render('index', {
         'title': 'Dashboard',
         'admin': req.user.admin,
+        'socket': { port: req.config.client.port },
         'confbridge': req.confbridge,
         'dial': req.config.confbridge.dial,
     });

@@ -10,3 +10,6 @@ tr:nth-child(even) {
 tr:nth-child(odd) {
     background: none;
 }
+td:last-child {
+    width: 100%;
+}
