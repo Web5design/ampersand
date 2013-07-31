@@ -152,7 +152,25 @@
                 <td class="label">Invite</td>
                 <td>
                     Dial: {{ dial }}<br />
-                    Conference Number {{ conference.conference }}
+                    Conference Number: {{ conference.conference }}
+                </td>
+            </tr>
+            {% endif %}
+
+            {% if (controls|length) %}
+            <tr>
+                <td class="label">Controls</td>
+                <td>
+                    <table class="controls">
+                        <tbody>
+                            {% for key, action in controls %}
+                            <tr>
+                                <td>{{ key }}</td>
+                                <td>{{ action }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </td>
             </tr>
             {% endif %}

@@ -12,7 +12,8 @@ exports.view = function(req, res) {
         'admin': req.user.admin,
         'socket': { port: req.config.client.port },
         'conference': req.conference,
-        'dial': req.config.confbridge.dial
+        'dial': req.config.confbridge.dial,
+        'controls': req.config.confbridge.controls
     });
 }
 

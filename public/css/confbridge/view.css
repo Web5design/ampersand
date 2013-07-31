@@ -7,3 +7,18 @@ ul.options {
 tr.recordings {
     display: none;
 }
+
+table.controls {
+    background: none;
+    border: none;
+    margin: 0;
+}
+table.controls tr {
+    background: none;
+}
+table.controls tr:hover {
+    background: none;
+}
+table.controls td {
+    padding: 1px;
+}
