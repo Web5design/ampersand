@@ -131,6 +131,11 @@
             {% endif %}
 
             <tr>
+                <td class="label">Expiration</td>
+                <td>{% if (conference.expiration) %}{{ conference.expiration }}{% else %}None{% endif %}</td>
+            </tr>
+
+            <tr>
                 <td class="label">Options</td>
                 <td>
                     <ul class="options">
