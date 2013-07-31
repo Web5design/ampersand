@@ -2,7 +2,8 @@ exports.index = function(req, res) {
     res.render('index', {
         'title': 'Dashboard',
         'admin': req.user.admin,
-        'confbridge': req.confbridge
+        'confbridge': req.confbridge,
+        'dial': req.config.confbridge.dial,
     });
 }
 
