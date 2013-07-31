@@ -2,15 +2,49 @@
 <html>
     <head>
         <title>{{ title }}</title>
-        <link rel='stylesheet' href='/css/ampersand.css' />
+        <link rel="stylesheet" href="/css/ampersand.css" />
+        <link rel="stylesheet" href="/css/dashboard.css" />
         <script src="/socket.io/socket.io.js"></script>
         <script>
-            var socket = io.connect('http://' + window.location.hostname + ':8888');
+            var socket = io.connect('http://' + window.location.hostname + ':{{ socket.port }}');
+
+            socket.on('connect', function() {
+                // Register with the server to recieve global confbridge events
+                socket.emit('confbridge');
+            });
+
+            socket.on('confbridgeEvent', function(evt) {
+                console.log(evt);
+
+                switch (evt.event.toLowerCase()) {
+                    case 'confbridgelistroomscomplete':
+                        var html = '';
+                        for (var i = 0; i < evt.list.length; i++) {
+                            html += '<tr id="conference/' + evt.list[i].conference + '">' +
+                                '<td><a href="/confbridge/view/' + evt.list[i].conference + '">' + evt.list[i].conference + '</a></td>' +
+                                '<td>' + evt.list[i].parties + '</td>' +
+                                '</tr>';
+                        }
+                        document.getElementById('inprogresslist').innerHTML = html;
+                        document.getElementById('inprogress').style.display = (evt.list.length) ? 'table' : 'none';
+                    break;
+                }
+            });
         </script>
     </head>
     <body>
         <h1>{{ title }}</h1>
         {% include 'menu.twig' %}
+
+        <table id="inprogress">
+            <caption>Conferences In Progress</caption>
+            <tr>
+                <th>Conference Number</th>
+                <th>Participants</th>
+            </tr>
+            <tbody id="inprogresslist">
+            </tbody>
+        </table>
 
         {% if (confbridge.permanent|length) %}
         <table>
