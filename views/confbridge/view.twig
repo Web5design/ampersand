@@ -12,6 +12,7 @@
         <script>
             var socket = io.connect('http://' + window.location.hostname + ':{{ socket.port }}');
             var channel = {};
+            var state = {};
 
             socket.on('connect', function() {
                 // Register with the server for this conference
@@ -27,17 +28,20 @@
                     case 'confbridgetalking':
                         var talking = evt.talkingstatus == 'on' ? 'Yes' : 'No';
                         channel[evt.channel] = talking;
+                        state[evt.channel] = talking;
                         document.getElementById(evt.channel).innerHTML = talking;
                         break;
 
                     case 'confbridgemute':
                         logConfbridgeEvent(evt);
-                        document.getElementById(evt.channel).innerHTML = 'Muted';
+                        state[evt.channel] = 'Muted';
+                        document.getElementById(evt.channel).innerHTML = state[evt.channel];
                         break;
 
                     case 'confbridgeunmute':
                         logConfbridgeEvent(evt);
-                        document.getElementById(evt.channel).innerHTML = (channel[evt.channel]) ? channel[evt.channel] : '';
+                        state[evt.channel] = (channel[evt.channel]) ? channel[evt.channel] : '';
+                        document.getElementById(evt.channel).innerHTML = state[evt.channel];
                         break;
 
                     case 'confbridgelistcomplete':
@@ -45,7 +49,7 @@
                         for (var i = 0; i < evt.list.length; i++) {
                             html += '<tr id="channel/' + evt.list[i].channel + '">' +
                                 '<td class="action">[ <a href="javascript:void(0)" id="mute/' + evt.list[i].channel + '">mute</a> | <a href="javascript:void(0)" id="unmute/' + evt.list[i].channel + '">unmute</a> | <a href="javascript:void(0)" id="kick/' + evt.list[i].channel + '">kick</a> ]</td>' +
-                                '<td class="status" id="' + evt.list[i].channel + '"></td>' +
+                                '<td class="status" id="' + evt.list[i].channel + '">' + ((state[evt.list[i].channel]) ? state[evt.list[i].channel] : '') + '</td>' +
                                 '<td class="channel">' + evt.list[i].channel + '</td>' +
                                 '<td class="calleridnum">' + evt.list[i].calleridnum + '</td>' +
                                 '<td class="calleridname">' + evt.list[i].calleridname + '</td>' +
