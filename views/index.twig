@@ -63,7 +63,7 @@
                 <td><a href="/confbridge/view/{{ conference.conference }}">{{ conference.conference }}</a></td>
                 <td class="conference_name">{{ conference.name }}</td>
                 <td>{{ conference.owner }}</td>
-                <td>{% if (conference.expiration) %}{{ conference.expiration }}{% else %}None{% endif %}</td>
+                <td class="expiration">None</td>
                 {% if (dial) %}<td class="action"><a href="sip:{{ dial }}#{{ conference.conference }}#">Join</a></td>{% endif %}
             </tr>
             {% endfor %}
@@ -85,7 +85,7 @@
                 <td><a href="/confbridge/view/{{ conference.conference }}">{{ conference.conference }}</a></td>
                 <td class="conference_name">{{ conference.name }}</td>
                 <td>{{ conference.owner }}</td>
-                <td>{% if (conference.expiration) %}{{ conference.expiration }}{% else %}None{% endif %}</td>
+                <td class="expiration">{% if (conference.expiration) %}{{ conference.expiration }}{% else %}None{% endif %}</td>
                 {% if (dial) %}<td class="action"><a href="sip:{{ dial }}#{{ conference.conference }}#">Join</a></td>{% endif %}
             </tr>
             {% endfor %}
@@ -106,7 +106,7 @@
                 <td><a href="/confbridge/view/{{ conference.conference }}">{{ conference.conference }}</a></td>
                 <td class="conference_name">{{ conference.name }}</td>
                 <td>{{ conference.owner }}</td>
-                <td>{% if (conference.expiration) %}{{ conference.expiration }}{% else %}None{% endif %}</td>
+                <td class="expiration">{% if (conference.expiration) %}{{ conference.expiration }}{% else %}None{% endif %}</td>
             </tr>
             {% endfor %}
         </table>

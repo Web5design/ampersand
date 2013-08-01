@@ -16,8 +16,11 @@ table.controls, table.recordings{
 table.controls tr, table.recordings tr {
     background: none;
 }
-table.controls tr:hover, table.recordings tr:hover {
+table.controls tr:hover {
     background: none;
+}
+table.recordings tr:hover {
+    background: #eeeeee;
 }
 table.controls td {
     padding: 2px;
@@ -31,9 +34,18 @@ table.recordings tr:last-child td {
 }
 
 td.action {
+    width: 1px;
+    white-space: nowrap;
     font-size: 0.75em;
 }
 
+td.recordingaction, td.recordingsize, td.recordingfile {
+    width: 1px;
+    white-space: nowrap;
+}
+td.recordingtime {
+    width: 100%;
+}
 td.channel, td.calleridnum, td.calleridname, td.details {
     width: 100%;
 }

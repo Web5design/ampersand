@@ -63,9 +63,9 @@
                         for (var i = 0; i < evt.recordings.length; i++) {
                             html += '<tr>' +
                                 '<td class="recordingtime">' + new Date(evt.recordings[i].stats.ctime).toString() + '</td>' +
-                                '<td class="recordingdownload"><a href="/confbridge/recordings/' + evt.conference + '/' + evt.recordings[i].file + '">' + evt.recordings[i].file + '</a></td>' +
+                                '<td class="recordingfile">' + evt.recordings[i].file + '</td>' +
                                 '<td class="recordingsize">' + getBytesWithUnit(evt.recordings[i].stats.size) + '</td>' +
-                                '<td class="recordingplay">[ <a href="javascript:void(0)" id="play/' + evt.recordings[i].file + '">Play</a> ]</td>' +
+                                '<td class="recordingaction">[ <a href="javascript:void(0)" id="play/' + evt.recordings[i].file + '">Play</a> | <a href="/confbridge/recordings/' + evt.conference + '/' + evt.recordings[i].file + '">Download</a> | <a href="javascript:void(0)" id="delete/' + evt.recordings[i].file + '">Delete</a> ]</td>' +
                             '</tr>';
                         }
                         document.getElementById('recordinglist').innerHTML = html;
@@ -110,10 +110,18 @@
 
                 // Play a recording
                 $(document).on('click', 'a[id^="play/"]', function() {
+                    var file = this.id.substring(5);
                     var html = '<audio controls autoplay>' +
-                        '<source src="/confbridge/recordings/{{ conference.conference }}/' + this.id.substring(5) + '" type="audio/wav">' +
+                        '<source src="/confbridge/recordings/{{ conference.conference }}/' + file + '" type="audio/wav">' +
                         '</audio>';
-                    $(this).parent().html(html);
+                    $('#player').html(html);
+                    $(this).parent().parent().siblings().css('background-color', '');
+                    $(this).parent().parent().css('background-color', '#ccffcc');
+                });
+
+                // Delete a recording
+                $(document).on('click', 'a[id^="delete/"]', function() {
+                    socket.emit('confbidge/deleterecording', this.id.substring(7));
                 });
             });
 
@@ -185,6 +193,7 @@
             <tr id="recordings" class="recordings">
                 <td class="label">Recordings</td>
                 <td>
+                    <div id="player"></div>
                     <div class="scrollable">
                         <table class="recordings" id="recordinglist"></table>
                     </div>

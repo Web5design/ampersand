@@ -9,3 +9,7 @@ td.conference_name {
 td.parties {
     width: 100%;
 }
+
+td.expiration {
+    white-space: nowrap;
+}
