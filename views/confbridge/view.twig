@@ -121,7 +121,7 @@
 
                 // Delete a recording
                 $(document).on('click', 'a[id^="delete/"]', function() {
-                    socket.emit('confbidge/deleterecording', this.id.substring(7));
+                    socket.emit('confbridge/deleterecording', this.id.substring(7));
                 });
             });
 
