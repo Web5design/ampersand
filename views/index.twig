@@ -42,7 +42,7 @@
                             html += '<tr>' +
                                 '<td><a href="/confbridge/view/' + evt.list[i].conference + '">' + evt.list[i].conference + '</a></td>' +
                                 '<td class="conference_name">' + evt.list[i].name + '</td>' +
-                                '<td>' + evt.list[i].owner + '</td>' +
+                                '<td>' + ((evt.list[i].owner) ? evt.list[i].owner : '') + '</td>' +
                                 '</tr>';
                         }
                         $('#confbridge_permanent').html(html);
@@ -56,7 +56,7 @@
                             html += '<tr>' +
                                 '<td><a href="/confbridge/view/' + evt.list[i].conference + '">' + evt.list[i].conference + '</a></td>' +
                                 '<td class="conference_name">' + evt.list[i].name + '</td>' +
-                                '<td>' + evt.list[i].owner + '</td>' +
+                                '<td>' + ((evt.list[i].owner) ? evt.list[i].owner : '') + '</td>' +
                                 '<td class="expiration">' + evt.list[i].expiration + '</td>' +
                                 '</tr>';
                         }
@@ -71,7 +71,7 @@
                             html += '<tr>' +
                                 '<td><a href="/confbridge/view/' + evt.list[i].conference + '">' + evt.list[i].conference + '</a></td>' +
                                 '<td class="conference_name">' + evt.list[i].name + '</td>' +
-                                '<td>' + evt.list[i].owner + '</td>' +
+                                '<td>' + ((evt.list[i].owner) ? evt.list[i].owner : '') + '</td>' +
                                 '<td class="expiration">' + evt.list[i].expiration + '</td>' +
                                 '</tr>';
                         }
