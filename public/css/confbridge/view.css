@@ -61,3 +61,14 @@ td.details ul li {
     display: inline;
     width: 33.333%;
 }
+
+#player audio {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 20px;
+    vertical-align: middle;
+}
+
+#player span {
+    vertical-align: middle;
+}
