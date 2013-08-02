@@ -13,3 +13,7 @@ td.parties {
 td.expiration {
     white-space: nowrap;
 }
+
+table.conferencelist {
+    display: none;
+}

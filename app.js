@@ -66,7 +66,7 @@ app.configure(function() {
 });
 
 // Routes
-app.get('/', restricted, confbridge.dashboard, routes.index);
+app.get('/', restricted, routes.index);
 app.get('/events', restricted, admin, routes.events);
 
 app.get('/confbridge/create', restricted, confbridge.create, routes.confbridge.create)

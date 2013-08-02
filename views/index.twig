@@ -4,7 +4,10 @@
         <title>{{ title }}</title>
         <link rel="stylesheet" href="/css/ampersand.css" />
         <link rel="stylesheet" href="/css/dashboard.css" />
+
+        <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
         <script src="/socket.io/socket.io.js"></script>
+
         <script>
             var socket = io.connect('http://' + window.location.hostname + ':{{ socket.port }}');
 
@@ -17,6 +20,8 @@
                 console.log(evt);
 
                 switch (evt.event.toLowerCase()) {
+
+                    // List of in-progress conferences
                     case 'confbridgelistroomscomplete':
                         var html = '';
                         for (var i = 0; i < evt.list.length; i++) {
@@ -28,7 +33,52 @@
                         }
                         document.getElementById('inprogresslist').innerHTML = html;
                         document.getElementById('inprogress').style.display = (evt.list.length) ? 'table' : 'none';
-                    break;
+                        break;
+
+                    // List of permanent conferences
+                    case 'confbridgelistpermanentroomscomplete':
+                        var html = '';
+                        for (var i = 0; i < evt.list.length; i++) {
+                            html += '<tr>' +
+                                '<td><a href="/confbridge/view/' + evt.list[i].conference + '">' + evt.list[i].conference + '</a></td>' +
+                                '<td class="conference_name">' + evt.list[i].name + '</td>' +
+                                '<td>' + evt.list[i].owner + '</td>' +
+                                '</tr>';
+                        }
+                        $('#confbridge_permanent').html(html);
+                        $('#confbridge_permanent').parent().css('display', ((evt.list.length) ? 'table' : ''));
+                        break;
+
+                    // List of active conferences
+                    case 'confbridgelistactiveroomscomplete':
+                        var html = '';
+                        for (var i = 0; i < evt.list.length; i++) {
+                            html += '<tr>' +
+                                '<td><a href="/confbridge/view/' + evt.list[i].conference + '">' + evt.list[i].conference + '</a></td>' +
+                                '<td class="conference_name">' + evt.list[i].name + '</td>' +
+                                '<td>' + evt.list[i].owner + '</td>' +
+                                '<td class="expiration">' + evt.list[i].expiration + '</td>' +
+                                '</tr>';
+                        }
+                        $('#confbridge_active').html(html);
+                        $('#confbridge_active').parent().css('display', ((evt.list.length) ? 'table' : ''));
+                        break;
+
+                    // List of expired conferences
+                    case 'confbridgelistexpiredroomscomplete':
+                        var html = '';
+                        for (var i = 0; i < evt.list.length; i++) {
+                            html += '<tr>' +
+                                '<td><a href="/confbridge/view/' + evt.list[i].conference + '">' + evt.list[i].conference + '</a></td>' +
+                                '<td class="conference_name">' + evt.list[i].name + '</td>' +
+                                '<td>' + evt.list[i].owner + '</td>' +
+                                '<td class="expiration">' + evt.list[i].expiration + '</td>' +
+                                '</tr>';
+                        }
+                        $('#confbridge_expired').html(html);
+                        $('#confbridge_expired').parent().css('display', ((evt.list.length) ? 'table' : ''));
+                        break;
+
                 }
             });
         </script>
@@ -48,69 +98,43 @@
             </tbody>
         </table>
 
-        {% if (confbridge.permanent|length) %}
-        <table>
+        <table class="conferencelist">
             <caption>Permanent Conferences</caption>
-            <tr>
-                <th>Conference</th>
-                <th>Name</th>
-                <th>Owner</th>
-                <th>Expiration</th>
-                {% if (dial) %}<th></th>{% endif %}
-            </tr>
-            {% for conference in confbridge.permanent %}
-            <tr>
-                <td><a href="/confbridge/view/{{ conference.conference }}">{{ conference.conference }}</a></td>
-                <td class="conference_name">{{ conference.name }}</td>
-                <td>{{ conference.owner }}</td>
-                <td class="expiration">None</td>
-                {% if (dial) %}<td class="action"><a href="sip:{{ dial }}#{{ conference.conference }}#">Join</a></td>{% endif %}
-            </tr>
-            {% endfor %}
+            <thead>
+                <tr>
+                    <th>Conference</th>
+                    <th>Name</th>
+                    <th>Owner</th>
+                </tr>
+            </thead>
+            <tbody id="confbridge_permanent"></tbody>
         </table>
-        {% endif %}
 
-        {% if (confbridge.active|length) %}
-        <table>
+        <table class="conferencelist">
             <caption>Active Conferences</caption>
-            <tr>
-                <th>Conference</th>
-                <th>Name</th>
-                <th>Owner</th>
-                <th>Expiration</th>
-                {% if (dial) %}<th></th>{% endif %}
-            </tr>
-            {% for conference in confbridge.active %}
-            <tr>
-                <td><a href="/confbridge/view/{{ conference.conference }}">{{ conference.conference }}</a></td>
-                <td class="conference_name">{{ conference.name }}</td>
-                <td>{{ conference.owner }}</td>
-                <td class="expiration">{% if (conference.expiration) %}{{ conference.expiration }}{% else %}None{% endif %}</td>
-                {% if (dial) %}<td class="action"><a href="sip:{{ dial }}#{{ conference.conference }}#">Join</a></td>{% endif %}
-            </tr>
-            {% endfor %}
+            <thead>
+                <tr>
+                    <th>Conference</th>
+                    <th>Name</th>
+                    <th>Owner</th>
+                    <th>Expiration</th>
+                </tr>
+            </thead>
+            <tbody id="confbridge_active"></tbody>
         </table>
-        {% endif %}
 
-        {% if (confbridge.expired|length) %}
-        <table>
+        <table class="conferencelist">
             <caption>Expired Conferences</caption>
-            <tr>
-                <th>Conference</th>
-                <th>Name</th>
-                <th>Owner</th>
-                <th>Expiration</th>
-            </tr>
-            {% for conference in confbridge.expired %}
-            <tr>
-                <td><a href="/confbridge/view/{{ conference.conference }}">{{ conference.conference }}</a></td>
-                <td class="conference_name">{{ conference.name }}</td>
-                <td>{{ conference.owner }}</td>
-                <td class="expiration">{% if (conference.expiration) %}{{ conference.expiration }}{% else %}None{% endif %}</td>
-            </tr>
-            {% endfor %}
+            <thead>
+                <tr>
+                    <th>Conference</th>
+                    <th>Name</th>
+                    <th>Owner</th>
+                    <th>Expiration</th>
+                </tr>
+            </thead>
+            <tbody id="confbridge_expired"></tbody>
         </table>
-        {% endif %}
 
     </body>
 </html>
