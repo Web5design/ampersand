@@ -72,10 +72,11 @@ app.get('/events', restricted, admin, routes.events);
 app.get('/confbridge/create', restricted, confbridge.create, routes.confbridge.create)
 app.get('/confbridge/edit/:conference', restricted, confbridge.load, routes.confbridge.edit);
 app.get('/confbridge/view/:conference', restricted, confbridge.load, routes.confbridge.view);
-app.get('/confbridge/delete/:conference', restricted, confbridge.load, confbridge.delete);
+app.get('/confbridge/delete/:conference', restricted, confbridge.load, routes.confbridge.delete);
 app.get('/confbridge/recordings/:conference/:file', restricted, confbridge.load, routes.confbridge.recordings);
 
 app.post('/confbridge/save', restricted, confbridge.save);
+app.post('/confbridge/delete/:conference', restricted, confbridge.load, confbridge.delete);
 
 // Login/Logout
 app.get('/logout', routes.logout);

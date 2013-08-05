@@ -31,6 +31,21 @@ exports.edit = function(req, res) {
     }
 }
 
+exports.delete = function(req, res) {
+    // Only conference owners and admins can delete a conference
+    if (req.conference.admin) {
+        res.render('confbridge/delete', {
+            'title': 'Delete Conference',
+            'admin': req.user.admin,
+            'socket': { port: req.config.client.port },
+            'conference': req.conference
+        });
+    } else {
+        res.status(403);
+        res.render('403');
+    }
+}
+
 exports.recordings = function(req, res) {
     // Only conference owners and admins can download recordings
     if (req.conference.admin) {

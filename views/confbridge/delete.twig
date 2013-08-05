@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{{ title }}</title>
+        <link rel="stylesheet" href="/css/ampersand.css" />
+        <link rel="stylesheet" href="/css/confbridge/delete.css" />
+
+        <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="/js/util.js"></script>
+
+        <script>
+            var socket = io.connect('http://' + window.location.hostname + ':{{ socket.port }}');
+
+            socket.on('connect', function() {
+                // Register with the server for this conference
+                socket.emit('confbridge', {{ conference.conference }});
+            });
+
+            // Handle confbridge events.
+            socket.on('confbridgeEvent', function(evt) {
+                console.log(evt);
+
+                switch (evt.event.toLowerCase()) {
+                    case 'confbridgerecordings':
+                        var html = '';
+                        for (var i = 0; i < evt.recordings.length; i++) {
+                            html += '<tr>' +
+                                '<td class="recordingtime">' + new Date(evt.recordings[i].stats.ctime).toString() + '</td>' +
+                                '<td class="recordingfile"><a href="javascript:void(0)" id="play/' + evt.recordings[i].file + '">' + evt.recordings[i].file + '</a></td>' +
+                                '<td class="recordingsize">' + getBytesWithUnit(evt.recordings[i].stats.size) + '</td>' +
+                            '</tr>';
+                        }
+                        document.getElementById('recordinglist').innerHTML = html;
+                        document.getElementById('recordings').style.display = (evt.recordings.length) ? 'table-row' : 'none';
+                        break;
+                }
+            });
+
+            // Jquery events
+            $( document ).ready(function() {
+                // Play a recording
+                $(document).on('click', 'a[id^="play/"]', function() {
+                    var file = this.id.substring(5);
+                    var html = '<audio controls autoplay>' +
+                        '<source src="/confbridge/recordings/{{ conference.conference }}/' + file + '" type="audio/wav">' +
+                        '</audio>' +
+                        '<span class="file">' + file + ' [ <a href="/confbridge/recordings/{{ conference.conference }}/' + file + '">Download</a> | <a href="javascript:void(0)" id="delete/' + file + '">Delete</a> ]</span>';
+                    $('#player').html(html);
+                    $(this).parent().parent().siblings().css('background-color', '');
+                    $(this).parent().parent().css('background-color', '#ccffcc');
+                });
+
+                // Delete a recording
+                $(document).on('click', 'a[id^="delete/"]', function() {
+                    $('#player').html('');
+                    socket.emit('confbridge/deleterecording', this.id.substring(7));
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <h1>{{ title }}</h1>
+        {% include 'menu.twig' %}
+        <form action="/confbridge/delete/{{ conference.conference }}" method="post">
+            <table>
+                <tr>
+                    <td class="label">Conference Number</td>
+                    <td>{{ conference.conference }}</td>
+                </tr>
+
+                {% if (conference.owner) %}
+                <tr>
+                    <td class="label">Owner</td>
+                    <td>{{ conference.owner }}</td>
+                </tr>
+                {% endif %}
+
+                <tr>
+                    <td class="label">Expiration</td>
+                    <td>{% if (conference.expiration) %}{{ conference.expiration }}{% else %}None{% endif %}</td>
+                </tr>
+
+                <tr>
+                    <td class="label">Options</td>
+                    <td>
+                        <ul class="options">
+                            <li><input type="checkbox" disabled="disabled" {% if (conference.music_on_hold_when_empty) %}checked="checked" {% endif %}/>Play Hold Music</li>
+                            <li><input type="checkbox" disabled="disabled" {% if (conference.quiet) %}checked="checked" {% endif %}/>Quiet</li>
+                            <li><input type="checkbox" disabled="disabled" {% if (conference.announce_join_leave) %}checked="checked" {% endif %}/>Announce Join/Leave</li>
+                            <li><input type="checkbox" disabled="disabled" {% if (conference.record_conference) %}checked="checked" {% endif %}/>Record Conference</li>
+                        </ul>
+                    </td>
+                </tr>
+
+                {% if (dial) %}
+                <tr>
+                    <td class="label">Invite</td>
+                    <td>
+                        Dial: {{ dial }}<br />
+                        Conference Number: {{ conference.conference }}
+                    </td>
+                </tr>
+                {% endif %}
+
+                {% if (conference.admin) %}
+                <tr id="recordings" class="recordings">
+                    <td class="label">Recordings</td>
+                    <td>
+                        <div id="player"></div>
+                        <div class="scrollable">
+                            <table class="recordings" id="recordinglist"></table>
+                        </div>
+                    </td>
+                </tr>
+                {% endif %}
+
+            </table>
+
+            <div class="confirm">
+                Are you sure you want to delete this conference and all of its recordings?
+                <input type="submit" value="Delete" name="delete" />
+                <input type="submit" value="Cancel" name="cancel" />
+            </div>
+
+        </form>
+    </body>
+</html>

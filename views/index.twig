@@ -39,9 +39,19 @@
                     case 'confbridgelistpermanentroomscomplete':
                         var html = '';
                         for (var i = 0; i < evt.list.length; i++) {
+                            // Generate the action menu
+                            var actions = '<ul>';
+                            {% if (dial) %}actions += '<li><a href="sip:{{ dial }}#' + evt.list[i].conference + '*">Join</a></li>';{% endif %}
+                            if ({{ admin }} || evt.list[i].owner == '{{ user }}') {
+                                actions += '<li><a href="/confbridge/edit/' + evt.list[i].conference + '">Edit</a></li>';
+                                actions += '<li><a href="/confbridge/delete/' + evt.list[i].conference + '">Delete</a></li>';
+                            }
+                            actions += '</ul>';
+
+                            // Generate the table row
                             html += '<tr>' +
                                 '<td><a href="/confbridge/view/' + evt.list[i].conference + '">' + evt.list[i].conference + '</a></td>' +
-                                {% if (dial) %}'<td class="action">[ <a href="sip:{{ dial }}#' + evt.list[i].conference + '*">Join</a> ]</td>' +{% endif %}
+                                '<td class="action">' + actions + '</td>' +
                                 '<td class="conference_name">' + evt.list[i].name + '</td>' +
                                 '<td>' + ((evt.list[i].owner) ? evt.list[i].owner : '') + '</td>' +
                                 '</tr>';
@@ -55,9 +65,19 @@
                         var html = '';
                         var myHtml = '';
                         for (var i = 0; i < evt.list.length; i++) {
+                            // Generate the action menu
+                            var actions = '<ul>';
+                            {% if (dial) %}actions += '<li><a href="sip:{{ dial }}#' + evt.list[i].conference + '*">Join</a></li>';{% endif %}
+                            if ({{ admin }} || evt.list[i].owner == '{{ user }}') {
+                                actions += '<li><a href="/confbridge/edit/' + evt.list[i].conference + '">Edit</a></li>';
+                                actions += '<li><a href="/confbridge/delete/' + evt.list[i].conference + '">Delete</a></li>';
+                            }
+                            actions += '</ul>';
+
+                            // Generate the table row
                             var row = '<tr>' +
                                 '<td><a href="/confbridge/view/' + evt.list[i].conference + '">' + evt.list[i].conference + '</a></td>' +
-                                {% if (dial) %}'<td class="action">[ <a href="sip:{{ dial }}#' + evt.list[i].conference + '*">Join</a> ]</td>' +{% endif %}
+                                '<td class="action">' + actions + '</td>' +
                                 '<td class="conference_name">' + evt.list[i].name + '</td>' +
                                 '<td class="expiration">' + evt.list[i].expiration + '</td>' +
                                 '<td>' + ((evt.list[i].owner) ? evt.list[i].owner : '') + '</td>' +
@@ -77,8 +97,18 @@
                     case 'confbridgelistexpiredroomscomplete':
                         var html = '';
                         for (var i = 0; i < evt.list.length; i++) {
+                            // Generate the action menu
+                            var actions = '<ul>';
+                            if ({{ admin }} || evt.list[i].owner == '{{ user }}') {
+                                actions += '<li><a href="/confbridge/edit/' + evt.list[i].conference + '">Edit</a></li>';
+                                actions += '<li><a href="/confbridge/delete/' + evt.list[i].conference + '">Delete</a></li>';
+                            }
+                            actions += '</ul>';
+
+                            // Generate the table row
                             html += '<tr>' +
                                 '<td><a href="/confbridge/view/' + evt.list[i].conference + '">' + evt.list[i].conference + '</a></td>' +
+                                '<td class="action">' + actions + '</td>' +
                                 '<td class="conference_name">' + evt.list[i].name + '</td>' +
                                 '<td class="expiration">' + evt.list[i].expiration + '</td>' +
                                 '<td>' + ((evt.list[i].owner) ? evt.list[i].owner : '') + '</td>' +
@@ -100,7 +130,7 @@
             <caption>Conferences In Progress</caption>
             <tr>
                 <th>Conference</th>
-                {% if (dial) %}<th></th>{% endif %}
+                <th><!-- Actions --></th>
                 <th>Participants</th>
             </tr>
             <tbody id="inprogresslist">
@@ -112,7 +142,7 @@
             <thead>
                 <tr>
                     <th>Conference</th>
-                    {% if (dial) %}<th></th>{% endif %}
+                    <th><!-- Actions --></th>
                     <th>Name</th>
                     <th>Owner</th>
                 </tr>
@@ -125,7 +155,7 @@
             <thead>
                 <tr>
                     <th>Conference</th>
-                    {% if (dial) %}<th></th>{% endif %}
+                    <th><!-- Actions --></th>
                     <th>Name</th>
                     <th>Expiration</th>
                     <th>Owner</th>
@@ -139,7 +169,7 @@
             <thead>
                 <tr>
                     <th>Conference</th>
-                    {% if (dial) %}<th></th>{% endif %}
+                    <th><!-- Actions --></th>
                     <th>Name</th>
                     <th>Expiration</th>
                     <th>Owner</th>
@@ -153,6 +183,7 @@
             <thead>
                 <tr>
                     <th>Conference</th>
+                    <th><!-- Actions --></th>
                     <th>Name</th>
                     <th>Expiration</th>
                     <th>Owner</th>

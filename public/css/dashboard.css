@@ -19,8 +19,30 @@ table.conferencelist {
 }
 
 td.action {
-    width: 1px;
+    min-width: 110px;
     white-space: nowrap;
     font-size: 0.8em;
     vertical-align: middle;
+}
+
+td.action ul {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+}
+
+td.action ul li {
+    display: inline;
+}
+
+td.action ul li:before {
+    content: " | ";
+}
+
+td.action ul li:first-child:before {
+    content: "[ ";
+}
+
+td.action ul li:last-child:after {
+    content: " ]";
 }

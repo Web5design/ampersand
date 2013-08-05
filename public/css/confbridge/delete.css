@@ -1,0 +1,53 @@
+ul.options {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+tr.recordings {
+    display: none;
+}
+
+table.controls, table.recordings{
+    background: none;
+    border: none;
+    margin: 0;
+}
+
+table.recordings tr:hover {
+    background: #eeeeee;
+}
+
+table.recordings tr:first-child td {
+    padding-top: 0;
+}
+table.recordings tr:last-child td {
+    padding-bottom: 0;
+}
+
+td.recordingaction, td.recordingsize, td.recordingfile {
+    width: 1px;
+    white-space: nowrap;
+}
+td.recordingtime {
+    width: 100%;
+}
+#player audio {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 20px;
+    vertical-align: middle;
+}
+
+#player span {
+    vertical-align: middle;
+}
+
+div.confirm {
+    border: 1px solid black;
+    background: red;
+    color: white;
+    font-weight: bold;
+    font-size: 1.25em;
+    padding: 30px;
+}
