@@ -17,3 +17,10 @@ td.expiration {
 table.conferencelist {
     display: none;
 }
+
+td.action {
+    width: 1px;
+    white-space: nowrap;
+    font-size: 0.8em;
+    vertical-align: middle;
+}

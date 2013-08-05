@@ -3,6 +3,7 @@ exports.index = function(req, res) {
         'title': 'Dashboard',
         'admin': req.user.admin,
         'socket': { port: req.config.client.port },
+        'dial': req.config.confbridge.dial,
     });
 }
 
