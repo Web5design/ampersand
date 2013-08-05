@@ -53,17 +53,24 @@
                     // List of active conferences
                     case 'confbridgelistactiveroomscomplete':
                         var html = '';
+                        var myHtml = '';
                         for (var i = 0; i < evt.list.length; i++) {
-                            html += '<tr>' +
+                            var row = '<tr>' +
                                 '<td><a href="/confbridge/view/' + evt.list[i].conference + '">' + evt.list[i].conference + '</a></td>' +
                                 {% if (dial) %}'<td class="action">[ <a href="sip:{{ dial }}#' + evt.list[i].conference + '*">Join</a> ]</td>' +{% endif %}
                                 '<td class="conference_name">' + evt.list[i].name + '</td>' +
-                                '<td>' + ((evt.list[i].owner) ? evt.list[i].owner : '') + '</td>' +
                                 '<td class="expiration">' + evt.list[i].expiration + '</td>' +
+                                '<td>' + ((evt.list[i].owner) ? evt.list[i].owner : '') + '</td>' +
                                 '</tr>';
+                            html += row;
+                            if (evt.list[i].owner == '{{ user }}') myHtml += row;
                         }
+
                         $('#confbridge_active').html(html);
                         $('#confbridge_active').parent().css('display', ((evt.list.length) ? 'table' : ''));
+
+                        $('#confbridge_myconferences').html(myHtml);
+                        $('#confbridge_myconferences').parent().css('display', ((myHtml != '') ? 'table' : ''));
                         break;
 
                     // List of expired conferences
@@ -73,8 +80,8 @@
                             html += '<tr>' +
                                 '<td><a href="/confbridge/view/' + evt.list[i].conference + '">' + evt.list[i].conference + '</a></td>' +
                                 '<td class="conference_name">' + evt.list[i].name + '</td>' +
-                                '<td>' + ((evt.list[i].owner) ? evt.list[i].owner : '') + '</td>' +
                                 '<td class="expiration">' + evt.list[i].expiration + '</td>' +
+                                '<td>' + ((evt.list[i].owner) ? evt.list[i].owner : '') + '</td>' +
                                 '</tr>';
                         }
                         $('#confbridge_expired').html(html);
@@ -114,14 +121,28 @@
         </table>
 
         <table class="conferencelist">
+            <caption>My Active Conferences</caption>
+            <thead>
+                <tr>
+                    <th>Conference</th>
+                    {% if (dial) %}<th></th>{% endif %}
+                    <th>Name</th>
+                    <th>Expiration</th>
+                    <th>Owner</th>
+                </tr>
+            </thead>
+            <tbody id="confbridge_myconferences"></tbody>
+        </table>
+
+        <table class="conferencelist">
             <caption>Active Conferences</caption>
             <thead>
                 <tr>
                     <th>Conference</th>
                     {% if (dial) %}<th></th>{% endif %}
                     <th>Name</th>
-                    <th>Owner</th>
                     <th>Expiration</th>
+                    <th>Owner</th>
                 </tr>
             </thead>
             <tbody id="confbridge_active"></tbody>
@@ -133,8 +154,8 @@
                 <tr>
                     <th>Conference</th>
                     <th>Name</th>
-                    <th>Owner</th>
                     <th>Expiration</th>
+                    <th>Owner</th>
                 </tr>
             </thead>
             <tbody id="confbridge_expired"></tbody>
